@@ -4,19 +4,23 @@ import pandas as pd
 
 class ProductivityTracker:
     def __init__(self):
-        self.activities = pd.DataFrame(columns=['Activity', 'Start Time', 'Stop Time'])
+        self.activities = pd.DataFrame(columns=['Activity','Date', 'Start Time', 'Stop Time'])
         self.current_activity = None
         self.current_start_time = None
+        self.date_st = None
 
     def start_activity(self, activity):
         self.current_activity = activity
         self.current_start_time = datetime.now()
+        self.date_st=self.current_start_time.date()
+        self.current_start_time = self.current_start_time.time()
         print(f"Started activity '{activity}' at {self.current_start_time}")
 
     def stop_activity(self):
         if self.current_activity is not None:
             stop_time = datetime.now()
-            log_entry = pd.DataFrame({'Activity': [self.current_activity], 'Start Time': [self.current_start_time], 'Stop Time': [stop_time]})
+            stop_time = stop_time.time()
+            log_entry = pd.DataFrame({'Activity': [self.current_activity],'Date':[self.date_st], 'Start Time': [self.current_start_time], 'Stop Time': [stop_time]})
             self.activities = pd.concat([self.activities, log_entry], ignore_index=True)
             print(f"Stopped activity '{self.current_activity}' at {stop_time}")
             self.current_activity = None
